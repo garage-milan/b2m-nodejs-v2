@@ -1,5 +1,5 @@
 site_name: Build to Manage - Node.js Observability
-repo_url: https://github.com/rafal-szypulka/b2m-nodejs-v2
+repo_url: https://github.com/garage-milan/b2m-nodejs-v2
 site_url: https://rafal-szypulka.github.io/b2m-nodejs-v2/
 nav:
     - 1. Introduction: index.md

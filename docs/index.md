@@ -25,7 +25,7 @@ If you have access and would like to use [Fyre](https://fyre.ibm.com), I'd recom
 Clone the following repository from GitHub.
 
 ```
-git clone https://github.com/rafal-szypulka/b2m-nodejs-v2
+git clone https://github.com/garage-milan/b2m-nodejs-v2
 ```
 
 Most of the commands should be executed from the `b2m-nodejs-v2/lab-x` directory:

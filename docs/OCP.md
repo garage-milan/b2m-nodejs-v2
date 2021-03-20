@@ -12,7 +12,7 @@ oc create -f b2m-nodejs.yml
 ```
 In case of [problems with pulling the app image from Docker Hub](https://www.openshift.com/blog/mitigate-impact-of-docker-hub-pull-request-limits), you can build the application image by yourself using:
 ```sh
-oc new-app https://github.com/rafal-szypulka/b2m-nodejs-v2 \
+oc new-app https://github.com/garage-milan/b2m-nodejs-v2 \
 --context-dir=lab-4/app --name b2m-nodejs \
 --labels='name=b2m-nodejs' --insecure-registry=true
 ```
