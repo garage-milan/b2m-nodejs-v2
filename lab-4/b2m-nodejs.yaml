@@ -1,8 +1,11 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: b2m-nodejs
 spec:
+  selector:
+    matchLabels:
+      app: b2m-nodejs
   replicas: 1
   template:
     metadata:
@@ -11,9 +14,13 @@ spec:
     spec:
       containers:
         - name: node-prom
-          image: rszypulka/b2m-nodejs
+          image: quay.io/garage_milan/b2m-nodejs
           ports:
             - containerPort: 3001
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
           livenessProbe:
             httpGet:
               path: /healthz

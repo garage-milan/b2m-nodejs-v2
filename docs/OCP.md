@@ -4,13 +4,16 @@ OpenShift Container Platform includes a pre-configured, pre-installed, and self-
 In this lab we will configure application monitoring stack on Openshift 4.x using Prometheus Operator for a sample Node.js microservice instrumented with Prometheus client library (instrumentation was covered in Lab-3).
 
 ### Deploy an instrumented application
-Use the following command and provided yaml file, to deploy sample Node.js microservice instrumented with Prometheus client library. 
+
+Use the following command and provided yaml file, to deploy sample Node.js microservice instrumented with Prometheus client library.
 
 ```sh
-oc new-project b2m-nodejs
-oc create -f b2m-nodejs.yml
+oc new-project b2m-nodejs-<your_initials>
+oc create -f b2m-nodejs.yaml
 ```
+
 In case of [problems with pulling the app image from Docker Hub](https://www.openshift.com/blog/mitigate-impact-of-docker-hub-pull-request-limits), you can build the application image by yourself using:
+
 ```sh
 oc new-app https://github.com/garage-milan/b2m-nodejs-v2 \
 --context-dir=lab-4/app --name b2m-nodejs \
@@ -25,22 +28,27 @@ The monitor expects the service's port name to be `web`, so edit the service and
     ports:
       - name: web
 ```
+
 Create route to expose this application externally:
 
 ```sh
 oc expose svc b2m-nodejs
 ```
+
 Collect the app URL:
 
 ```sh
-$ oc get routes -n default
-NAME         HOST/PORT                                       PATH   SERVICES     PORT    TERMINATION   WILDCARD
-b2m-nodejs   b2m-nodejs-b2m-nodejs.apps.rsocp.os.fyre.ibm.com          b2m-nodejs   <all>   edge          None
+$ oc get routes -n b2m-nodejs
+NAME         HOST/PORT                  PATH        SERVICES  PORT  TERMINATION   WILDCARD
+b2m-nodejs   b2m-nodejs-b2m-nodejs...   b2m-nodejs  <all>     edge  None
+
+$ export B2M_NODEJS_HOST=$(oc get routes b2m-nodejs -n b2m-nodejs -o go-template='{{.spec.host}}')
 ```
+
 and make sure it works:
 
 ```sh
-$ curl -k https://b2m-nodejs-b2m-nodejs.apps.rsocp.os.fyre.ibm.com
+$ curl -k http://$B2M_NODEJS_HOST
 
 {"status":"ok","transactionTime":"353ms"}
 ```
@@ -48,7 +56,7 @@ $ curl -k https://b2m-nodejs-b2m-nodejs.apps.rsocp.os.fyre.ibm.com
 Verify that it properly exposes metrics in Prometheus format:
 
 ```sh
-$ curl -k https://b2m-nodejs-b2m-nodejs.apps.rsocp.os.fyre.ibm.com/metrics
+$ curl -k http://$B2M_NODEJS_HOST/metrics
 
 # HELP process_cpu_user_seconds_total Total user CPU time spent in seconds.
 # TYPE process_cpu_user_seconds_total counter
@@ -66,7 +74,7 @@ process_cpu_seconds_total 0.3038910000000002 1573764470969
 
 ### Deploy Prometheus monitoring stack for applications.
 
-1). Create a new project for the Prometheus monitoring stack for applications.
+1). Create a new project for the Prometheus monitoring stack for applications. Use unique project name.
 
 ![](images/2019-11-13-13-28-53.png)
 
@@ -87,7 +95,7 @@ process_cpu_seconds_total 0.3038910000000002 1573764470969
 ![](images/2019-11-13-13-45-19.png)
 
 6). Modify default YAML template for Prometheus. I added `serviceMonitorSelector` definition which will instruct defined Prometheus instance to match `ServiceMonitors` with label `key=btm-metrics`. I also changed the Prometheus instance name to `app-monitor`.
-   
+
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus

@@ -13,8 +13,6 @@ Instrumentation of the application code with metrics, logging and tracing is par
 
 ## Prerequisites
 Install the following software on your workstation. You may use your laptop for all the labs, but probably a better idea is to use a clean Linux VM.
-If you have access and would like to use [Fyre](https://fyre.ibm.com), I'd recommend to deploy Ubuntu 20.04 ember with 8 core CPU and 16 GB RAM (for this setup, installation of all prerequisites is as easy as
-`apt install docker-compose`). 
 
 - [Docker for Desktop](https://www.docker.com/products/docker-desktop)
 - [Docker Compose](https://docs.docker.com/compose/install)
